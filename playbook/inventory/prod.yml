@@ -3,7 +3,13 @@
     hosts:
       elastic:
         ansible_connection: docker
+
   kibana:
     hosts:
       elastic:
+        ansible_connection: docker
+
+  logstash:
+    hosts:
+      logstash:
         ansible_connection: docker

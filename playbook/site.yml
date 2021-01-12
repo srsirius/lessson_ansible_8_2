@@ -97,3 +97,28 @@
           extra_opts: [ --strip-components=1 ]
           creates: "{{ kibana_home }}/bin/kibana"
         tags: kibana
+
+#  - name: Install Logstash
+#    hosts: logstash
+#    tasks:
+#      - name: Download & install the public signing key
+#        rpm_key:
+#          state: present
+#          key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+#        tags: logstash
+#      - name: Add logstash YUM repository
+#        yum_repository:
+#          name: logstash_repo
+#          description: Logstash YUM repo
+#          file: logstash
+#          baseurl: "https://artifacts.elastic.co/packages/7.x/yum"
+#          gpgkey: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+#          enabled: 1
+#        tags: logstash
+#      - name: install Logstash
+#        yum:
+#          name: logstash
+#          update_cache: yes
+#        register: install_logstash
+#        until: install_logstash is succeeded
+#        tags: logstash
