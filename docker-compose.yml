@@ -27,7 +27,7 @@ services:
           memory: 512M
     container_name: 'logstash'
     tty: true
-    volumes:
+#    volumes:
 #      - "./tmp_logstash/:/tmp/"
 #      - "./opt_logstash/jdk:/opt/jdk"
 #      - "./opt_logstash/logstash:/etc/logstash"

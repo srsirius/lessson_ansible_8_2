@@ -11,25 +11,44 @@ lessson_ansible_8_2 - это механизм подготовки к автом
 - На контейнер elastic устанавливает пакеты:
   - Elasticsearch (tags: elastic)
   - Kibana (tags: kibana)
-- На контейнер logstash ставим Logstash (tags: logstash)    
+- На контейнер logstash ставим Logstash (tags: logstash)  
+
+##Переменные
+
+
+kibana_version - номер версии
+
+kibana_home - папка установки Kibana
+
+elastic_version - номер версии
+
+elastic_home - папка установки Elasticsearch
+
+java_jdk_version - номер версии
+
+java_oracle_jdk_package - имя файла для установки
+
+## Как использовать
+* Прочтите всю документацию.
+* Клонируйте репозиторий к себе на компьютер.
+* Отредактируйте файлы под себя(docker-compose, dokerfile, playbook/inventory/prod.yml)
+* Читайте пункт Запуск
 
 ## Запуск
-Запускаем playbook из папки playbook. Ждем полной установки JDK, Elasticsearch и Kibana в контейнер elastic.
-> ansible-playbook -i inventory/prod.yaml site.yml
-3. При создании tasks рекомендую использовать модули: `get_url`, `template`, `unarchive`, `file`.
-4. Tasks должны: скачать нужной версии дистрибутив, выполнить распаковку в выбранную директорию, сгенерировать конфигурацию с параметрами.
-5. Запустите `ansible-lint site.yml` и исправьте ошибки, если они есть.
-6. Попробуйте запустить playbook на этом окружении с флагом `--check`.
-7. Запустите playbook на `prod.yml` окружении с флагом `--diff`. Убедитесь, что изменения на системе произведены.
-8. Повторно запустите playbook с флагом `--diff` и убедитесь, что playbook идемпотентен.
-9. Подготовьте README.md файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.
-10. Готовый playbook выложите в свой репозиторий, в ответ предоставьте ссылку на него.
+Подготовка:
 
-## Необязательная часть
+Создадим сеть
+>docker network create sirius-network
 
-1. Приготовьте дополнительный хост для установки logstash.
-2. Пропишите данный хост в `prod.yml` в новую группу `logstash`.
-3. Дополните playbook ещё одним play, который будет исполнять установку logstash только на выделенный для него хост.
-4. Все переменные для нового play определите в отдельный файл `group_vars/logstash/vars.yml`.
-5. Logstash конфиг должен конфигурироваться в части ссылки на elasticsearch (можно взять, например его IP из facts или определить через vars).
-6. Дополните README.md, протестируйте playbook, выложите новую версию в github. В ответ предоставьте ссылку на репозиторий.
+Подготовим докер-контейнеры
+
+>docker-compose build
+
+Запускаем контейнеры
+>docker-compose up -d
+
+Запускаем playbook - будут установлены пакеты и созданы папки для их хранения локально.
+>ansible-playbook -i playbook/inventory/prod.yml playbook/site.yml
+
+Logstash пока в работе. Столкнулся с проблемой - docker контейнеры не работают с systemd, который нужен для запуска logstash, надо мудрить, либо переходить на виртуальную машину.
+
